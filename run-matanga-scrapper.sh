@@ -1,4 +1,5 @@
 #! /usr/bin/env bash
+cd /home/nika/matanga-scrapper
 DATA_DIR="data"
 NOW_MONTH="$(date +%m)"
 SAVE_DIR="${DATA_DIR}/${NOW_MONTH}"
