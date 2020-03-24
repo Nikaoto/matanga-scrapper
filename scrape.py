@@ -1,4 +1,3 @@
-#from xvfbwrapper import Xvfb
 import json
 import sys
 from datetime import datetime
@@ -158,10 +157,6 @@ BATUMI_URL = "https://matanga.guru/?sName=&sCase=all&sSellerID=&sSortType=dWeigh
 KUTAISI_URL = "https://matanga.guru/?sName=&sCase=all&sSellerID=&sSortType=dWeight_asc&iSecondLevel=&iFirstLevel={}#ContentBar".format(KUTAISI_REGION_CODE)
 ANAKLIA_URL = "https://matanga.guru/?sName=&sCase=all&sSellerID=&sSortType=dWeight_asc&iFirstLevel={}#ContentBar".format(ANAKLIA_REGION_CODE)
 
-# Set up virtual display (for headless browser)
-#vdisplay = Xvfb()
-#vdisplay.start()
-
 # Set profile (Tor proxy)
 profile = webdriver.FirefoxProfile()
 profile.set_preference("network.proxy.type", 1)
@@ -178,6 +173,8 @@ def create_driver():
     return webdriver.Firefox(firefox_profile=profile, options=options, executable_path=GECKODRIVER_PATH)
 
 product_list = []
+
+log("Scrapping started")
 
 # Scrap Tbilisi
 driver = create_driver()
@@ -211,4 +208,4 @@ file = open(OUT_FILE_NAME, "w", encoding="utf8")
 json.dump(product_list, file, ensure_ascii=False, sort_keys=False, indent=2)
 file.close()
 
-#vdisplay.stop()
+log("Scrapping finished")
