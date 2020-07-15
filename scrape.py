@@ -152,10 +152,12 @@ BATUMI_REGION_CODE = "1634"
 KUTAISI_REGION_CODE = "1896"
 ANAKLIA_REGION_CODE = "1819"
 
-TBILISI_URL = "https://matanga.guru/?sName=&sCase=all&sSellerID=&sSortType=dWeight_asc&iFirstLevel={}&iSecondLevel=".format(TBILISI_REGION_CODE)
-BATUMI_URL = "https://matanga.guru/?sName=&sCase=all&sSellerID=&sSortType=dWeight_asc&iFirstLevel={}&iSecondLevel=".format(BATUMI_REGION_CODE)
-KUTAISI_URL = "https://matanga.guru/?sName=&sCase=all&sSellerID=&sSortType=dWeight_asc&iSecondLevel=&iFirstLevel={}#ContentBar".format(KUTAISI_REGION_CODE)
-ANAKLIA_URL = "https://matanga.guru/?sName=&sCase=all&sSellerID=&sSortType=dWeight_asc&iFirstLevel={}#ContentBar".format(ANAKLIA_REGION_CODE)
+TBILISI_URL = "https://matanga.sx/?sName=&sCase=all&sSellerID=&sSortType=dWeight_asc&iFirstLevel={}&iSecondLevel=".format(TBILISI_REGION_CODE)
+print(TBILISI_URL)
+
+BATUMI_URL = "https://matanga.sx/?sName=&sCase=all&sSellerID=&sSortType=dWeight_asc&iFirstLevel={}&iSecondLevel=".format(BATUMI_REGION_CODE)
+KUTAISI_URL = "https://matanga.sx/?sName=&sCase=all&sSellerID=&sSortType=dWeight_asc&iSecondLevel=&iFirstLevel={}#ContentBar".format(KUTAISI_REGION_CODE)
+ANAKLIA_URL = "https://matanga.sx/?sName=&sCase=all&sSellerID=&sSortType=dWeight_asc&iFirstLevel={}#ContentBar".format(ANAKLIA_REGION_CODE)
 
 # Set profile (Tor proxy)
 profile = webdriver.FirefoxProfile()
