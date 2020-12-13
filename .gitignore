@@ -1,4 +1,6 @@
 geckodriver.log
+mail_login.py
 .DS_Store
 data/
 logs/
+__pycache__/
