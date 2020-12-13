@@ -1,5 +1,7 @@
 import json
 import sys
+import traceback
+from send_email import send_fail_email
 from datetime import datetime
 from selenium import webdriver
 from selenium.webdriver.support.ui import WebDriverWait as wait
@@ -27,6 +29,7 @@ if len(sys.argv) < 2:
 
 OUT_FILE_DIR = sys.argv[1]
 OUT_FILE_NAME = "{}/{}.json".format(OUT_FILE_DIR, NOW)
+SHOULD_SEND_FAIL_EMAIL = "--send-fail-email" in sys.argv
 
 def ignore_non_utf(s):
     return bytes(s, "utf-8").decode("utf-8", "ignore")
@@ -147,22 +150,24 @@ def scrape_region(driver, product_list, url, region_code):
             break
     return 0
 
+MATANGA_URL="http://matanvxfog3qvbgf.onion"
+
 TBILISI_REGION_CODE = "1633"
 BATUMI_REGION_CODE = "1634"
 KUTAISI_REGION_CODE = "1896"
 ANAKLIA_REGION_CODE = "1819"
 
-TBILISI_URL = "https://matanga.sx/?sName=&sCase=all&sSellerID=&sSortType=dWeight_asc&iFirstLevel={}&iSecondLevel=".format(TBILISI_REGION_CODE)
-BATUMI_URL = "https://matanga.sx/?sName=&sCase=all&sSellerID=&sSortType=dWeight_asc&iFirstLevel={}&iSecondLevel=".format(BATUMI_REGION_CODE)
-KUTAISI_URL = "https://matanga.sx/?sName=&sCase=all&sSellerID=&sSortType=dWeight_asc&iSecondLevel=&iFirstLevel={}#ContentBar".format(KUTAISI_REGION_CODE)
-ANAKLIA_URL = "https://matanga.sx/?sName=&sCase=all&sSellerID=&sSortType=dWeight_asc&iFirstLevel={}#ContentBar".format(ANAKLIA_REGION_CODE)
+TBILISI_URL = "{}/?sName=&sCase=all&sSellerID=&sSortType=dWeight_asc&iFirstLevel=1633&iSecondLevel=".format(MATANGA_URL)
+BATUMI_URL = "{}/?sName=&sCase=all&sSellerID=&sSortType=dWeight_asc&iFirstLevel=1634".format(MATANGA_URL)
+KUTAISI_URL = "{}/?sName=&sCase=all&sSellerID=&sSortType=dWeight_asc&iSecondLevel=&iFirstLevel=1896".format(MATANGA_URL)
+ANAKLIA_URL = "{}/?sName=&sCase=all&sSellerID=&sSortType=dWeight_asc&iFirstLevel=1819".format(MATANGA_URL)
 
 # Set profile (Tor proxy)
 profile = webdriver.FirefoxProfile()
 profile.set_preference("network.proxy.type", 1)
 profile.set_preference("network.proxy.socks", "127.0.0.1")
 profile.set_preference("network.proxy.socks_port", 9050)
-profile.set_preference("network.proxy.socks_remote_dns", False)
+profile.set_preference("network.proxy.socks_remote_dns", True)
 profile.update_preferences()
 
 # Set options (headless)
@@ -174,38 +179,38 @@ def create_driver():
 
 product_list = []
 
-log("Scrapping started")
+log("Scraping started")
+try:
+    driver = create_driver()
 
-# Scrap Tbilisi
-driver = create_driver()
-retcode = scrape_region(driver, product_list, TBILISI_URL, TBILISI_REGION_CODE)
-if retcode == 1:
-    log("Tbilisi scrapping failed")
-driver.quit()
+    # Scrap Tbilisi
+    retcode = scrape_region(driver, product_list, TBILISI_URL, TBILISI_REGION_CODE)
+    if retcode == 1:
+        log("Tbilisi scraping failed")
 
-# Scrap Batumi
-driver = create_driver()
-retcode = scrape_region(driver, product_list, BATUMI_URL, BATUMI_REGION_CODE)
-if retcode == 1:
-    log("Batumi scrapping failed")
-driver.quit()
+    # Scrap Batumi
+    retcode = scrape_region(driver, product_list, BATUMI_URL, BATUMI_REGION_CODE)
+    if retcode == 1:
+        log("Batumi scraping failed")
 
-# Scrap Kutaisi
-driver = create_driver()
-retcode = scrape_region(driver, product_list, KUTAISI_URL, KUTAISI_REGION_CODE)
-if retcode == 1:
-    log("Kutaisi scrapping failed")
-driver.quit()
+    # Scrap Kutaisi
+    retcode = scrape_region(driver, product_list, KUTAISI_URL, KUTAISI_REGION_CODE)
+    if retcode == 1:
+        log("Kutaisi scraping failed")
 
-# Scrap Anaklia
-driver = create_driver()
-retcode = scrape_region(driver, product_list, ANAKLIA_URL, ANAKLIA_REGION_CODE)
-if retcode == 1:
-    log("Anaklia scrapping failed")
-driver.quit()
+    # Scrap Anaklia
+    retcode = scrape_region(driver, product_list, ANAKLIA_URL, ANAKLIA_REGION_CODE)
+    if retcode == 1:
+        log("Anaklia scraping failed")
 
-file = open(OUT_FILE_NAME, "w", encoding="utf8")
-json.dump(product_list, file, ensure_ascii=False, sort_keys=False, indent=2)
-file.close()
-
-log("Scrapping finished")
+    driver.quit()
+    file = open(OUT_FILE_NAME, "w", encoding="utf8")
+    json.dump(product_list, file, ensure_ascii=False, sort_keys=False, indent=2)
+    file.close()
+    log("Scraping finished")
+except Exception:
+    log(traceback.format_exc())
+    log("Scraping failed")
+    if SHOULD_SEND_FAIL_EMAIL:
+        log("Sending email")
+        send_fail_email("{} Scraping failed for \"{}\"".format(NOW, MATANGA_URL))
