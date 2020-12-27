@@ -7,7 +7,7 @@ def send_fail_email(msg_body):
     msg.set_content(msg_body)
     msg["Subject"] = "Matanga scraping failed"
     msg["From"] = user
-    msg["To"] = receivers.join(",")
+    msg["To"] = ",".join(receivers)
     context = ssl.create_default_context()
     server = smtplib.SMTP("smtp.gmail.com", port=587)
     server.starttls(context=context)
