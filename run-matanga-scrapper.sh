@@ -1,6 +1,6 @@
 #! /usr/bin/env bash
 cd /home/nika/matanga-scrapper
-[ "$1" != "-s" ] && FAIL_EMAIL_ARG="--send-fail-email" || FAIL_EMAIL_ARG=""
+[ "$1" = "-s" ] && FAIL_EMAIL_ARG="" || FAIL_EMAIL_ARG="--send-fail-email"
 DATA_DIR="data"
 LOGS_DIR="logs"
 ERR_LOGS_DIR="logs"
