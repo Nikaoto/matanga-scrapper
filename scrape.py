@@ -8,7 +8,7 @@ from selenium.webdriver.support.ui import WebDriverWait as wait
 from selenium.webdriver.support import expected_conditions as conds
 
 GECKODRIVER_PATH = "/usr/local/bin/geckodriver"
-EUR_TO_USD = 1.08
+EUR_TO_USD = 1.23
 RUB_TO_USD = 0.01
 UAH_TO_USD = 0.04
 
@@ -150,7 +150,7 @@ def scrape_region(driver, product_list, url, region_code):
             break
     return 0
 
-MATANGA_URL="http://matanvxfog3qvbgf.onion"
+MATANGA_URL="http://matan2sm3bomrby6.onion"
 
 TBILISI_REGION_CODE = "1633"
 BATUMI_REGION_CODE = "1634"
@@ -213,4 +213,6 @@ except Exception:
     log("Scraping failed")
     if SHOULD_SEND_FAIL_EMAIL:
         log("Sending email")
-        send_fail_email("{} Scraping failed for \"{}\"".format(NOW, MATANGA_URL))
+        succ = send_fail_email("{} Scraping failed for \"{}\"".format(NOW, MATANGA_URL))
+        if succ:
+            log("Failure email sent")

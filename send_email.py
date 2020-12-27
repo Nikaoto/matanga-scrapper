@@ -14,4 +14,4 @@ def send_fail_email(msg_body):
     server.login(user, password)
     server.sendmail(user, receivers, msg.as_string())
     server.quit()
-    print("Failure email sent")
+    return True
