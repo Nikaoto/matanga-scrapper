@@ -150,7 +150,7 @@ def scrape_region(driver, product_list, url, region_code):
             break
     return 0
 
-MATANGA_URL="http://matan2sm3bomrby6.onion"
+MATANGA_URL="http://matangapatoo7b4vduaj7pd5rcbzfdk6slrlu6borvxawulquqmdswyd.onion"
 
 TBILISI_REGION_CODE = "1633"
 BATUMI_REGION_CODE = "1634"
